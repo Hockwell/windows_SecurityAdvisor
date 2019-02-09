@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -21,8 +22,11 @@ namespace SecurityAdvisor
     /// <summary>
     /// Логика взаимодействия для MainWindow.xaml
     /// </summary>
+    
     public partial class MainWindow : Window
     {
+        private delegate void DelegateForAsync();
+
         private DB db;
         private List<WindowsOSProblem> problems;
 
@@ -33,9 +37,21 @@ namespace SecurityAdvisor
 
         private void Check_Btn_Click(object sender, RoutedEventArgs e)
         {
+            Check_Btn.IsEnabled = false;
+            progressBar.Visibility = Visibility.Visible;
+
+            DelegateForAsync asyncJob = new DelegateForAsync(MainJob);
+            asyncJob.BeginInvoke(null, null);
+
+            
+        }
+
+        private void MainJob()
+        {
             LoadProblemsList();
             DetectProblems();
             DetectionReportTXTExport.SaveDetectionReport(problems);
+            UpdateGUI();
         }
 
         private void LoadProblemsList()
@@ -50,6 +66,17 @@ namespace SecurityAdvisor
             {
                 problems[i].Detection.Execute();
             }
+        }
+
+        private void UpdateGUI()
+        {
+            Action action = () => { progressBar.Visibility = Visibility.Hidden; Check_Btn.IsEnabled = true; CloseApp(); };
+            Dispatcher.BeginInvoke(action);
+        }
+
+        private void CloseApp()
+        {
+            Environment.Exit(1);
         }
     }
 }

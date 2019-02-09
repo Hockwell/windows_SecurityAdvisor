@@ -26,6 +26,8 @@ namespace SecurityAdvisor.Infrastructure.FileExport
                 writer.WriteLine("-------- НЕНАЙДЕННЫЕ ПРОБЛЕМЫ --------");
                 PrintInfoAboutProblem(problems, writer, printCondition: problem => problem.Detection.Status == DetectionStatus.NotFound);
             }
+
+            System.Diagnostics.Process.Start(FILE_NAME);
         }
 
         private static void PrintInfoAboutProblem(List<WindowsOSProblem> problems, TextWriter writer, Func<WindowsOSProblem, bool> printCondition)
