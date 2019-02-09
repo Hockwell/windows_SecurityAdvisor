@@ -1,4 +1,7 @@
-﻿using System;
+﻿using SecurityAdvisor.Infrastructure;
+using SecurityAdvisor.Infrastructure.FileExport;
+using SecurityAdvisor.Model;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,9 +23,33 @@ namespace SecurityAdvisor
     /// </summary>
     public partial class MainWindow : Window
     {
+        private DB db;
+        private List<WindowsOSProblem> problems;
+
         public MainWindow()
         {
             InitializeComponent();
+        }
+
+        private void Check_Btn_Click(object sender, RoutedEventArgs e)
+        {
+            LoadProblemsList();
+            DetectProblems();
+            DetectionReportTXTExport.SaveDetectionReport(problems);
+        }
+
+        private void LoadProblemsList()
+        {
+            db = DB.Load();
+            problems = db.GetProblemsList();
+        }
+
+        private void DetectProblems()
+        {
+            for (int i = 0; i < problems.Count; i++)
+            {
+                problems[i].Detection.Execute();
+            }
         }
     }
 }
