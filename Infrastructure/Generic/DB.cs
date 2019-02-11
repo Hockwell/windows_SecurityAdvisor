@@ -35,8 +35,8 @@ namespace SecurityAdvisor.Infrastructure.Generic
 
         private DB()
         {
-            InitProblemsList();
             InitInstalledProgramsList();
+            InitProblemsList();
         }
 
         private void InitProblemsList()
@@ -61,11 +61,36 @@ namespace SecurityAdvisor.Infrastructure.Generic
                 AdviceForUser = "Проверьте установлена ли система резервного копирования",
                 Raiting = ProblemRaiting.Info,
                 Description = "Резервные копии позволяют избежать потери данных вследствие сбоев или повреждений вредоносным ПО. " +
-                "Рекомендуемые программы: Acronis, ",
+                "Рекомендуется использовать копирование по расписанию, а не фоновое - 1, 2 - в облако, а не локальное, чтобы не подтвергать резервные копии воздействию" +
+                "Ransomware, сбоев хранилищ или ошибок ОС. BackUp-программа отличается от клиента облачной синхронизации (OneDrive, GoogleDrive...) наличием" +
+                "продвинутых настроек и дополнительными защитными возможностями. Последние могут подвергаться атакам Ransomware, как минимум. OneDrive защищает от Ransomware," +
+                "но для этого нужна premium-подписка",
                 Detection = new BackupAppDT()
             });
 
-            /*
+            problems.Add(new WindowsOSProblem
+            {
+                Name = "Небезопасная разрядность",
+                AdviceForUser = "Поменяйте процессор на 64bit-ный, либо установите 64bit-ную версию ОС",
+                Raiting = ProblemRaiting.Info,
+                Description = "Все современные процессоры – с 64bit-ной архитектурой, " +
+                "в современных процессорах реализованы аппаратные методы защиты от угроз " +
+                "и эксплойтов. 64bit-ная версия ОС безопаснее 32bit-ной (по крайней мере, это было актуально во времена Windows Vista). ",
+                Detection = new OSBitDepthDT()
+            });
+
+            problems.Add(new WindowsOSProblem
+            {
+                Name = "Не установлен безопасный браузер",
+                AdviceForUser = "Перенесите свои закладки в один из указанных браузеров и используйте как основной именно его",
+                Raiting = ProblemRaiting.Recomended,
+                Description = "Один из следующих браузеров должен использоваться как основной для надёжной защиты " +
+                "системы: Google Chrome, Opera (Chromium), Edge, FireFox.  Данные браузеры постоянно " +
+                "обновляются и имеют слаженный оперативный процесс поиска и исправления уязвимостей.",
+                Detection = new InternetBrowserDT()
+            });
+
+            
             problems.Add(new WindowsOSProblem
             {
                 Name = "Опасные настройки службы обновления Windows",
@@ -75,7 +100,8 @@ namespace SecurityAdvisor.Infrastructure.Generic
                 "Обновления должны устанавливаться как можно скорее",
                 Detection = new UpdatesServiceDT()
             });
-            */
+            
+
         }
 
         private void InitInstalledProgramsList()

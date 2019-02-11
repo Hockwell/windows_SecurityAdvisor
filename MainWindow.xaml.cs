@@ -49,10 +49,18 @@ namespace SecurityAdvisor
 
         private void MainJob()
         {
-            LoadProblemsList();
-            DetectProblems();
-            DetectionReportTXTExport.SaveDetectionReport(problems);
-            UpdateGUI();
+            try
+            {
+                LoadProblemsList();
+                DetectProblems();
+                DetectionReportTXTExport.SaveDetectionReport(problems);
+                UpdateGUI();
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show("Возникла ошибка. Проверьте права программы.");
+            }
+            
         }
 
         private void LoadProblemsList()

@@ -46,7 +46,6 @@ namespace SecurityAdvisor.Infrastructure.Generic
         {
             List<string> installedAppsNames = DB.Load().GetInstalledProgramsList();
 
-            int indexOf_funcValue = 0;
             int keywordsCounter = 0; //фиксирует кол-во найденных слов группы в строке
 
             foreach (var appName in installedAppsNames)
@@ -59,10 +58,10 @@ namespace SecurityAdvisor.Infrastructure.Generic
                     keywordsCounter = 0;
                     for (int i = 0; i < keywordsGroup.Length; i++)
                     {
-                        indexOf_funcValue = appName.IndexOf(keywordsGroup[i], StringComparison.CurrentCultureIgnoreCase); //IndexOf возвращает -1, если ничего не нашёл. 
+                        //IndexOf возвращает -1, если ничего не нашёл. 
                         //Если хотя бы одно ключевое слово группы не найдено в строке, значит пропускаем 
                         //оставшиеся ключевые слова группы и переходим к следующей группе. 
-                        if (IsKeywordNotContainedInAppNameString())
+                        if (appName.IndexOf(keywordsGroup[i], StringComparison.CurrentCultureIgnoreCase) == -1)
                             break;
                         else
                             keywordsCounter ++;
@@ -70,7 +69,6 @@ namespace SecurityAdvisor.Infrastructure.Generic
                     if (IsAllKeywordsGroupContainedInAppNameString())
                         return true;
 
-                    bool IsKeywordNotContainedInAppNameString() => indexOf_funcValue == -1;
                     bool IsAllKeywordsGroupContainedInAppNameString() => keywordsCounter == keywordsGroup.Length;
                 }
             }

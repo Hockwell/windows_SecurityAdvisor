@@ -15,8 +15,9 @@ namespace SecurityAdvisor.Infrastructure.Detection
         {
             //Кол-во ключевых слов может быть любым, как и групп ключевых слов
             new string[] {"True", "Image" },
-            new string[] {"Acronis", "True", "Image" },
-            new string[] {"Acronis", "True", "Image" },
+            new string[] {"Kaspersky", "Total", "Security" },
+            new string[] {"Backup"},
+            new string[] {"Macrium", "Reflect" }
         };
 
         public override void Execute()

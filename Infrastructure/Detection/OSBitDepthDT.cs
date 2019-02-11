@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SecurityAdvisor.Infrastructure.Detection
 {
-    class UpdatesServiceDT : RegistryDT
+    class OSBitDepthDT : RegistryDT
     {
         public override void Execute()
         {

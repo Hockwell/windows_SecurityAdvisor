@@ -62,6 +62,8 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Infrastructure\Detection\InternetBrowserDT.cs" />
+    <Compile Include="Infrastructure\Detection\OSBitDepthDT.cs" />
     <Compile Include="Infrastructure\Generic\DB.cs" />
     <Compile Include="Infrastructure\Detection\BackupAppDT.cs" />
     <Compile Include="Infrastructure\Detection\UpdatesServiceDT.cs" />
