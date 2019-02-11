@@ -1,4 +1,5 @@
 ﻿using SecurityAdvisor.Infrastructure;
+using SecurityAdvisor.Infrastructure.Generic;
 using System;
 using System.Collections.Generic;
 using System.Linq;

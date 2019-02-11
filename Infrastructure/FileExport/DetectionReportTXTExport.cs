@@ -1,4 +1,5 @@
-﻿using SecurityAdvisor.Model;
+﻿using SecurityAdvisor.Infrastructure.Generic;
+using SecurityAdvisor.Model;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -41,9 +42,10 @@ namespace SecurityAdvisor.Infrastructure.FileExport
                 writer.WriteLine("Описание: " + TidyTextLenght(problems[i].Description));
                 writer.WriteLine("Серьёзность: " + TidyTextLenght(problems[i].Raiting.ToString()));
                 writer.WriteLine("Совет: " + TidyTextLenght(problems[i].AdviceForUser));
-            }
 
-            writer.WriteLine();
+                writer.WriteLine("---");
+            }
+            writer.WriteLine("");
         }
 
         private static string TidyTextLenght(string input)

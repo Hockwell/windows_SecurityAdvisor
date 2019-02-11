@@ -1,4 +1,5 @@
-﻿using SecurityAdvisor.Model;
+﻿using SecurityAdvisor.Infrastructure.Generic;
+using SecurityAdvisor.Model;
 using System;
 using System.Collections.Generic;
 using System.IO;

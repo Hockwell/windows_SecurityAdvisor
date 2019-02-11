@@ -62,13 +62,15 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Infrastructure\DB.cs" />
+    <Compile Include="Infrastructure\Generic\DB.cs" />
+    <Compile Include="Infrastructure\Detection\BackupAppDT.cs" />
     <Compile Include="Infrastructure\Detection\UpdatesServiceDT.cs" />
     <Compile Include="Infrastructure\FileExport\DetectionReportTXTExport.cs" />
     <Compile Include="Infrastructure\Detection\AntivirusDT.cs" />
     <Compile Include="Infrastructure\Detection\DetectionTechnique.cs" />
-    <Compile Include="Infrastructure\Enums.cs" />
+    <Compile Include="Infrastructure\Generic\Enums.cs" />
     <Compile Include="Infrastructure\Detection\RegistryDT.cs" />
+    <Compile Include="Infrastructure\Generic\UniversalStaticMethods.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>

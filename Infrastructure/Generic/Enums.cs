@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SecurityAdvisor.Infrastructure
+namespace SecurityAdvisor.Infrastructure.Generic
 {
     public enum ProblemRaiting
     {

@@ -1,5 +1,6 @@
 ﻿using SecurityAdvisor.Infrastructure;
 using SecurityAdvisor.Infrastructure.FileExport;
+using SecurityAdvisor.Infrastructure.Generic;
 using SecurityAdvisor.Model;
 using System;
 using System.Collections.Generic;
