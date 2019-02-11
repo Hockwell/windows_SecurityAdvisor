@@ -72,7 +72,7 @@
     <Compile Include="Infrastructure\Detection\DetectionTechnique.cs" />
     <Compile Include="Infrastructure\Generic\Enums.cs" />
     <Compile Include="Infrastructure\Detection\RegistryDT.cs" />
-    <Compile Include="Infrastructure\Generic\UniversalStaticMethods.cs" />
+    <Compile Include="Infrastructure\Generic\OSAppsListAnalyzer.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>

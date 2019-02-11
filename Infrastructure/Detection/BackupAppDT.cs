@@ -1,5 +1,5 @@
 ﻿using SecurityAdvisor.Infrastructure.Generic;
-using static SecurityAdvisor.Infrastructure.Generic.UniversalStaticMethods;
+using static SecurityAdvisor.Infrastructure.Generic.OSAppsListAnalyzer;
 using System;
 using System.Collections.Generic;
 using System.Linq;

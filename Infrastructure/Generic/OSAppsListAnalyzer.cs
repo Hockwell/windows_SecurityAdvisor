@@ -7,8 +7,10 @@ using System.Threading.Tasks;
 
 namespace SecurityAdvisor.Infrastructure.Generic
 {
-    public static class UniversalStaticMethods
+    public static class OSAppsListAnalyzer
     {
+        private const string APP_NAME_BY_ERROR = "-- Error --";
+
         public static List<string> GetInstalledAppNamesList()
         {
             List<string> appsNames = new List<string>();
@@ -28,7 +30,7 @@ namespace SecurityAdvisor.Infrastructure.Generic
                         catch (Exception ex)
                         {
                             Console.WriteLine(ex.StackTrace);
-                            appsNames.Add("-- Error --");
+                            appsNames.Add(APP_NAME_BY_ERROR);
                         }
                     }
                 }
@@ -48,9 +50,9 @@ namespace SecurityAdvisor.Infrastructure.Generic
 
             int keywordsCounter = 0; //фиксирует кол-во найденных слов группы в строке
 
-            foreach (var appName in installedAppsNames)
+            foreach (string appName in installedAppsNames)
             {
-                if (appName == null)
+                if (IsBadAppName())
                     continue;
 
                 foreach (string[] keywordsGroup in appNameKeywordGroups)
@@ -71,6 +73,8 @@ namespace SecurityAdvisor.Infrastructure.Generic
 
                     bool IsAllKeywordsGroupContainedInAppNameString() => keywordsCounter == keywordsGroup.Length;
                 }
+
+                bool IsBadAppName() => appName == null || appName == APP_NAME_BY_ERROR;
             }
             return false;
         }

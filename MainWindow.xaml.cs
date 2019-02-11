@@ -59,6 +59,7 @@ namespace SecurityAdvisor
             catch (Exception e)
             {
                 MessageBox.Show("Возникла ошибка. Проверьте права программы.");
+                Console.WriteLine(e.StackTrace);
             }
             
         }

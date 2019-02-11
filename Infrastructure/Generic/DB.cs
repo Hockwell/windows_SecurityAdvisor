@@ -106,7 +106,7 @@ namespace SecurityAdvisor.Infrastructure.Generic
 
         private void InitInstalledProgramsList()
         {
-            installedPrograms = UniversalStaticMethods.GetInstalledAppNamesList();
+            installedPrograms = OSAppsListAnalyzer.GetInstalledAppNamesList();
         }
         #endregion
     }
