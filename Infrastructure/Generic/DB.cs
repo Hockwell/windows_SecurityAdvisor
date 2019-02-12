@@ -118,6 +118,16 @@ namespace SecurityAdvisor.Infrastructure.Generic
                 "лучше себя обезопасить от исполнения подобного ПО.",
                 Detection = new JavaExecutionDT()
             });
+
+            problems.Add(new WindowsOSProblem
+            {
+                Name = "Не работает защита системных файлов",
+                AdviceForUser = "Проверьте лицензионная ли у вас ОС. Включите UAC.",
+                Raiting = ProblemRaiting.Critical,
+                Description = "UAC позволяет контролировать доступ программ к системным программам и папкам. W10 даже с выключенным UAC это реализует." +
+                "Пиратское ПО нарушает целостность лицензионного аналога и опасно внедрением шпионского ПО. ",
+                Detection = new UnauthorizedAccessToOS_DT()
+            });
         }
 
         private void InitInstalledProgramsList()
