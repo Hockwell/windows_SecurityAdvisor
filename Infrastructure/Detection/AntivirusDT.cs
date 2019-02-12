@@ -24,7 +24,7 @@ namespace SecurityAdvisor.Infrastructure.Detection
                 PlaceTestFile();
                 CheckFileAvailability();
             }
-            catch (UnauthorizedAccessException e)
+            catch (UnauthorizedAccessException)
             {
                 Status = DetectionStatus.NotFound; //расчёт на то, что именно антивирус блокирует доступ к файлу, а значит систему защищена
                 //(такое возможно при повторном запуске программы уже после обнаружения антивирусом файла)

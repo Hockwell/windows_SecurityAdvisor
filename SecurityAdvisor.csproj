@@ -62,10 +62,12 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Infrastructure\Detection\InternetBrowserDT.cs" />
-    <Compile Include="Infrastructure\Detection\InternetExplorerDT.cs" />
+    <Compile Include="Infrastructure\Detection\AppsListSearchDT.cs" />
+    <Compile Include="Infrastructure\Detection\TrustedInternetBrowsersDT.cs" />
+    <Compile Include="Infrastructure\Detection\JavaExecutionDT.cs" />
     <Compile Include="Infrastructure\Detection\OSBitDepthDT.cs" />
     <Compile Include="Infrastructure\Detection\TimeDT.cs" />
+    <Compile Include="Infrastructure\Detection\UnauthorizedAccessToOS_DT.cs" />
     <Compile Include="Infrastructure\Generic\DB.cs" />
     <Compile Include="Infrastructure\Detection\BackupAppDT.cs" />
     <Compile Include="Infrastructure\Detection\UpdatesServiceDT.cs" />
@@ -74,7 +76,6 @@
     <Compile Include="Infrastructure\Detection\DetectionTechnique.cs" />
     <Compile Include="Infrastructure\Generic\Enums.cs" />
     <Compile Include="Infrastructure\Detection\RegistryDT.cs" />
-    <Compile Include="Infrastructure\Generic\OSAppsListAnalyzer.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>

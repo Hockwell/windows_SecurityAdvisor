@@ -1,15 +1,24 @@
 ﻿using Microsoft.Win32;
+using SecurityAdvisor.Infrastructure.Generic;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SecurityAdvisor.Infrastructure.Generic
+namespace SecurityAdvisor.Infrastructure.Detection
 {
-    public static class OSAppsListAnalyzer
+    abstract class AppsListSearchDT : DetectionTechnique
     {
         private const string APP_NAME_BY_ERROR = "-- Error --";
+
+        //Поиск по ключевым словам: если в строке будет присутствовать ещё какая-нибудь информация типа версии или года, то это не испортит качество
+        protected abstract List<string[]> AppNamesKeywordGroups { get; }
+
+        public override void Execute()
+        {
+            Status = IsAtLeastOneAppInstalledAlready() ? DetectionStatus.NotFound : DetectionStatus.Found;
+        }
 
         public static List<string> GetInstalledAppNamesList()
         {
@@ -44,9 +53,14 @@ namespace SecurityAdvisor.Infrastructure.Generic
         //для улучшения качества поиска. 
         //Принцип: Метод ищет строки в списке строк, где есть группы ключевых слов, одна группа или одно слово-выражение, если находит хотя бы одну такую - возвращает true. 
         //Поиск не зависит от регистра
-        public static bool IsAtLeastOneAppInstalledAlready(List<string[]> appNameKeywordGroups)
+        protected bool IsAtLeastOneAppInstalledAlready()
         {
             List<string> installedAppsNames = DB.Load().GetInstalledProgramsList();
+
+            if (installedAppsNames == null) 
+            {
+                throw new Exception("installedAppsNames is null");
+            }
 
             int keywordsCounter = 0; //фиксирует кол-во найденных слов группы в строке
 
@@ -55,7 +69,7 @@ namespace SecurityAdvisor.Infrastructure.Generic
                 if (IsBadAppName())
                     continue;
 
-                foreach (string[] keywordsGroup in appNameKeywordGroups)
+                foreach (string[] keywordsGroup in AppNamesKeywordGroups)
                 {
                     keywordsCounter = 0;
                     for (int i = 0; i < keywordsGroup.Length; i++)
@@ -66,7 +80,7 @@ namespace SecurityAdvisor.Infrastructure.Generic
                         if (appName.IndexOf(keywordsGroup[i], StringComparison.CurrentCultureIgnoreCase) == -1)
                             break;
                         else
-                            keywordsCounter ++;
+                            keywordsCounter++;
                     }
                     if (IsAllKeywordsGroupContainedInAppNameString())
                         return true;
@@ -79,6 +93,5 @@ namespace SecurityAdvisor.Infrastructure.Generic
             return false;
         }
     }
-
-    
 }
+

@@ -50,7 +50,7 @@ namespace SecurityAdvisor.Infrastructure.Generic
                 AdviceForUser = "Проверьте установлен ли антивирус, включён ли он",
                 Raiting = ProblemRaiting.Critical,
                 Description = "Антивирус обязательно должен быть установлен для предотвращения повреждения и кражи данных. " +
-                "Некоторые антивирусы могут с опозданием отреагировать на размещение тестового файла." +
+                "Некоторые антивирусы могут с опозданием отреагировать на размещение тестового файла. " +
                 "Если после окончания работы программы файл таки будет обнаружен, проблемы нет.",
                 Detection = new AntivirusDT()
             });
@@ -61,10 +61,10 @@ namespace SecurityAdvisor.Infrastructure.Generic
                 AdviceForUser = "Проверьте установлена ли система резервного копирования",
                 Raiting = ProblemRaiting.Info,
                 Description = "Резервные копии позволяют избежать потери данных вследствие сбоев или повреждений вредоносным ПО. " +
-                "Рекомендуется использовать копирование по расписанию, а не фоновое - 1, 2 - в облако, а не локальное, чтобы не подтвергать резервные копии воздействию" +
-                "Ransomware, сбоев хранилищ или ошибок ОС. BackUp-программа отличается от клиента облачной синхронизации (OneDrive, GoogleDrive...) наличием" +
-                "продвинутых настроек и дополнительными защитными возможностями. Последние могут подвергаться атакам Ransomware, как минимум. OneDrive защищает от Ransomware," +
-                "но для этого нужна premium-подписка",
+                "Рекомендуется использовать копирование по расписанию, а не фоновое - 1, 2 - в облако, а не локальное, чтобы не подтвергать резервные копии воздействию " +
+                "Ransomware, сбоев хранилищ или ошибок ОС. BackUp-программа отличается от клиента облачной синхронизации (OneDrive, GoogleDrive...) наличием " +
+                "продвинутых настроек и дополнительными защитными возможностями. Последние могут подвергаться атакам Ransomware, как минимум. OneDrive защищает от Ransomware " +
+                "путём сохранения состояний файлов (механизм отката), но для этого нужна premium-подписка.",
                 Detection = new BackupAppDT()
             });
 
@@ -87,7 +87,7 @@ namespace SecurityAdvisor.Infrastructure.Generic
                 Description = "Один из следующих браузеров должен использоваться как основной для надёжной защиты " +
                 "системы: Google Chrome, Opera, Chromium, Edge, FireFox, Яндекс браузер. Данные браузеры постоянно " +
                 "обновляются и имеют слаженный оперативный процесс поиска и исправления уязвимостей.",
-                Detection = new InternetBrowserDT()
+                Detection = new TrustedInternetBrowsersDT()
             });
 
             problems.Add(new WindowsOSProblem
@@ -111,19 +111,18 @@ namespace SecurityAdvisor.Infrastructure.Generic
 
             problems.Add(new WindowsOSProblem
             {
-                Name = "Установлен Internet Explorer",
-                AdviceForUser = "Удалите его из системы",
-                Raiting = ProblemRaiting.Recomended,
-                Description = "Наличие данного браузера ставит систему под угрозу, поскольку вредоносное ПО может использовать его не только при " +
-                "входящем заражении через него (если пользователь специально или случайно посетит уязвимый сайт через него), но и при исходящем, " +
-                "для сокрытия своей сетевой активности. Он не поддерживается Microsoft с 2015 года.",
-                Detection = new InternetExplorerDT()
+                Name = "Установлено ПО Java для исполнения программ на данном языке",
+                AdviceForUser = "Удалите его из системы, если вы не используйте программы на Java",
+                Raiting = ProblemRaiting.Info,
+                Description = "Большое кол-во вредоносного ПО написано на Java и плохо обнаруживается антивирусным ПО. Если есть возможность," +
+                "лучше себя обезопасить от исполнения подобного ПО.",
+                Detection = new JavaExecutionDT()
             });
         }
 
         private void InitInstalledProgramsList()
         {
-            installedPrograms = OSAppsListAnalyzer.GetInstalledAppNamesList();
+            installedPrograms = AppsListSearchDT.GetInstalledAppNamesList();
         }
         #endregion
     }
