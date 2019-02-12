@@ -16,7 +16,8 @@ namespace SecurityAdvisor.Infrastructure.Detection
             new string[] {"Opera" },
             new string[] {"Firefox" },
             new string[] {"Chromium" },
-            new string[] {"Edge"}
+            new string[] {"Edge"},
+            new string[] {"Yandex", "Browser"}
         };
         //Edge невозможно удалить в W10, в более ранних ОС он наверное присутствует в списке программ
 

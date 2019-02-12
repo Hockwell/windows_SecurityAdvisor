@@ -39,14 +39,14 @@ namespace SecurityAdvisor.Infrastructure.Detection
         private void CheckFileAvailability()
         {
             int loop = 0;
-            int loopMax = 5;
+            int loopMax = 10; //кол-во секунд на ожидание
 
             do
             {
                 Thread.Sleep(1000);
                 loop ++;
             }
-            while (File.Exists(TEST_FILE_NAME) && loop < loopMax); //~5 секунд ждём удаления файла
+            while (File.Exists(TEST_FILE_NAME) && loop < loopMax);
 
             Status = (loop == loopMax) ? DetectionStatus.Found : DetectionStatus.NotFound;
 

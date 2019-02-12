@@ -85,12 +85,20 @@ namespace SecurityAdvisor.Infrastructure.Generic
                 AdviceForUser = "Перенесите свои закладки в один из указанных браузеров и используйте как основной именно его",
                 Raiting = ProblemRaiting.Recomended,
                 Description = "Один из следующих браузеров должен использоваться как основной для надёжной защиты " +
-                "системы: Google Chrome, Opera (Chromium), Edge, FireFox.  Данные браузеры постоянно " +
+                "системы: Google Chrome, Opera, Chromium, Edge, FireFox, Яндекс браузер. Данные браузеры постоянно " +
                 "обновляются и имеют слаженный оперативный процесс поиска и исправления уязвимостей.",
                 Detection = new InternetBrowserDT()
             });
 
-            
+            problems.Add(new WindowsOSProblem
+            {
+                Name = "Неверное время в системе",
+                AdviceForUser = "Установите правильно время, включите автоматическое определение часового пояса и времени в Параметрах/Панели управления Windows",
+                Raiting = ProblemRaiting.Recomended,
+                Description = "Ряд служб ОС и антивирус могут работать неправильно, если время в системе установлено не корректное.",
+                Detection = new TimeDT()
+            });
+
             problems.Add(new WindowsOSProblem
             {
                 Name = "Опасные настройки службы обновления Windows",
@@ -100,8 +108,17 @@ namespace SecurityAdvisor.Infrastructure.Generic
                 "Обновления должны устанавливаться как можно скорее",
                 Detection = new UpdatesServiceDT()
             });
-            
 
+            problems.Add(new WindowsOSProblem
+            {
+                Name = "Установлен Internet Explorer",
+                AdviceForUser = "Удалите его из системы",
+                Raiting = ProblemRaiting.Recomended,
+                Description = "Наличие данного браузера ставит систему под угрозу, поскольку вредоносное ПО может использовать его не только при " +
+                "входящем заражении через него (если пользователь специально или случайно посетит уязвимый сайт через него), но и при исходящем, " +
+                "для сокрытия своей сетевой активности. Он не поддерживается Microsoft с 2015 года.",
+                Detection = new InternetExplorerDT()
+            });
         }
 
         private void InitInstalledProgramsList()
