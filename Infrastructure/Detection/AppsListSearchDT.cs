@@ -13,7 +13,7 @@ namespace SecurityAdvisor.Infrastructure.Detection
         private const string APP_NAME_BY_ERROR = "-- Error --";
 
         //Поиск по ключевым словам: если в строке будет присутствовать ещё какая-нибудь информация типа версии или года, то это не испортит качество
-        protected abstract List<string[]> AppNamesKeywordGroups { get; }
+        protected abstract List<string[]> KeywordGroupsForSearch { get; }
 
         public override void Execute()
         {
@@ -69,7 +69,7 @@ namespace SecurityAdvisor.Infrastructure.Detection
                 if (IsBadAppName())
                     continue;
 
-                foreach (string[] keywordsGroup in AppNamesKeywordGroups)
+                foreach (string[] keywordsGroup in KeywordGroupsForSearch)
                 {
                     keywordsCounter = 0;
                     for (int i = 0; i < keywordsGroup.Length; i++)

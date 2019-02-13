@@ -70,17 +70,6 @@ namespace SecurityAdvisor.Infrastructure.Generic
 
             problems.Add(new WindowsOSProblem
             {
-                Name = "Небезопасная разрядность",
-                AdviceForUser = "Поменяйте процессор на 64bit-ный, либо установите 64bit-ную версию ОС",
-                Raiting = ProblemRaiting.Info,
-                Description = "Все современные процессоры – с 64bit-ной архитектурой, " +
-                "в современных процессорах реализованы аппаратные методы защиты от угроз " +
-                "и эксплойтов. 64bit-ная версия ОС безопаснее 32bit-ной (по крайней мере, это было актуально во времена Windows Vista). ",
-                Detection = new OSBitDepthDT()
-            });
-
-            problems.Add(new WindowsOSProblem
-            {
                 Name = "Не установлен безопасный браузер",
                 AdviceForUser = "Перенесите свои закладки в один из указанных браузеров и используйте как основной именно его",
                 Raiting = ProblemRaiting.Recomended,
@@ -127,6 +116,17 @@ namespace SecurityAdvisor.Infrastructure.Generic
                 Description = "UAC позволяет контролировать доступ программ к системным программам и папкам. W10 даже с выключенным UAC это реализует." +
                 "Пиратское ПО нарушает целостность лицензионного аналога и опасно внедрением шпионского ПО. ",
                 Detection = new UnauthorizedAccessToOS_DT()
+            });
+
+            problems.Add(new WindowsOSProblem
+            {
+                Name = "Установлен Adobe Flash",
+                AdviceForUser = "На всякий случай лучше удалить данное ПО из системы, тем более, что оно не имеет смысла, однако может стать причиной атаки. ",
+                Raiting = ProblemRaiting.Info,
+                Description = "Данное ПО позволяет воспроизводить веб-медиа-контент, однако часто используется злоумышленниками для совершения зловредных действий в " +
+                "системе минуя браузер. Менее 4% сайтов сегодня используют Flash, а браузеры отказываются воспроизводить соответствующий контент с помощью Flash по " +
+                "умолчанию во избежание проблем.",
+                Detection = new FlashAppDT()
             });
         }
 

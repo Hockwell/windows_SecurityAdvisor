@@ -63,9 +63,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Infrastructure\Detection\AppsListSearchDT.cs" />
+    <Compile Include="Infrastructure\Detection\FlashAppDT.cs" />
     <Compile Include="Infrastructure\Detection\TrustedInternetBrowsersDT.cs" />
     <Compile Include="Infrastructure\Detection\JavaExecutionDT.cs" />
-    <Compile Include="Infrastructure\Detection\OSBitDepthDT.cs" />
     <Compile Include="Infrastructure\Detection\TimeDT.cs" />
     <Compile Include="Infrastructure\Detection\UnauthorizedAccessToOS_DT.cs" />
     <Compile Include="Infrastructure\Generic\DB.cs" />

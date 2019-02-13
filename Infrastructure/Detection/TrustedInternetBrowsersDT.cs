@@ -9,7 +9,7 @@ namespace SecurityAdvisor.Infrastructure.Detection
 {
     class TrustedInternetBrowsersDT : AppsListSearchDT
     {
-        protected override List<string[]> AppNamesKeywordGroups => new List<string[]>()
+        protected override List<string[]> KeywordGroupsForSearch => new List<string[]>()
         {
             new string[] {"Chrome" },
             new string[] {"Opera" },

@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 
 namespace SecurityAdvisor.Infrastructure.Detection
 {
-    class JavaExecutionDT : AppsListSearchDT
+    class FlashAppDT : AppsListSearchDT
     {
         protected override List<string[]> KeywordGroupsForSearch => new List<string[]>()
         {
-            new string[] {"Java"}
+            new string[] {"Flash", "Adobe"}
         };
 
         public override void Execute()
