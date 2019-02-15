@@ -58,11 +58,10 @@ namespace SecurityAdvisor
             }
             catch (Exception e)
             {
-                MessageBox.Show("Возникла ошибка. Проверьте права программы.");
                 MessageBox.Show(e.Message, "Возникла ошибка", MessageBoxButton.OK, MessageBoxImage.Warning);
                 Console.WriteLine(e.StackTrace);
+                CloseApp();
             }
-            
         }
 
         private void LoadProblemsList()
@@ -75,7 +74,16 @@ namespace SecurityAdvisor
         {
             for (int i = 0; i < problems.Count; i++)
             {
-                problems[i].Detection.Execute();
+                try
+                {
+                    problems[i].Detection.Execute();
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.StackTrace);
+                    problems[i].Detection.Status = DetectionStatus.Error;
+                }
+                
             }
         }
 

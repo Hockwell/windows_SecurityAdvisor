@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace SecurityAdvisor.Infrastructure.Detection
 {
-    class FlashAppDT : AppsListSearchDT
+    class AdobeFlashDT : AppsListSearchDT
     {
         protected override List<string[]> KeywordGroupsForSearch => new List<string[]>()
         {

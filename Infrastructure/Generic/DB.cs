@@ -15,7 +15,7 @@ namespace SecurityAdvisor.Infrastructure.Generic
 
         public static DB Load()
         {
-            return db ?? new DB();
+            return db ?? (db = new DB());
         }
 
         public List<WindowsOSProblem> GetProblemsList()
@@ -30,8 +30,11 @@ namespace SecurityAdvisor.Infrastructure.Generic
         #endregion
 
         #region Data
+        public static readonly DateTime NULL_TIME = new DateTime(0); //У DateTime нет null-значения, поэтому пришлось создать своё
+
         private List<WindowsOSProblem> problems;
         private List<string> installedPrograms; //Сохранено именно здесь, чтобы >1 техники могли пользоваться этой информацией
+        public DateTime ActualTime { get; set; } = NULL_TIME; //Текущеее актуальное время, с помощью которого программа определяет ряд системных проблем, используя его как точку отсчёта.
 
         private DB()
         {
@@ -42,6 +45,15 @@ namespace SecurityAdvisor.Infrastructure.Generic
         private void InitProblemsList()
         {
             problems = new List<WindowsOSProblem>();
+
+            problems.Add(new WindowsOSProblem
+            {
+                Name = "Неверное время в системе",
+                AdviceForUser = "Установите правильно время, включите автоматическое определение часового пояса и времени в Параметрах/Панели управления Windows",
+                Raiting = ProblemRaiting.Critical,
+                Description = "Ряд служб ОС и антивирус могут работать неправильно, если время в системе установлено не корректное.",
+                Detection = new FalseTimeDT()
+            });
 
             problems.Add(new WindowsOSProblem //Не следует в текст вставлять escape-последовательности для выравнивания в 
                                               //файлах txt - он выравнивается с помощью специального метода
@@ -81,21 +93,12 @@ namespace SecurityAdvisor.Infrastructure.Generic
 
             problems.Add(new WindowsOSProblem
             {
-                Name = "Неверное время в системе",
-                AdviceForUser = "Установите правильно время, включите автоматическое определение часового пояса и времени в Параметрах/Панели управления Windows",
-                Raiting = ProblemRaiting.Recomended,
-                Description = "Ряд служб ОС и антивирус могут работать неправильно, если время в системе установлено не корректное.",
-                Detection = new TimeDT()
-            });
-
-            problems.Add(new WindowsOSProblem
-            {
                 Name = "Опасные настройки службы обновления Windows",
                 AdviceForUser = "Проверьте настройки, используя Панель управления или Параметры в Windows 10",
                 Raiting = ProblemRaiting.Critical,
                 Description = "Обновления нужны не только для повышения стабильности ОС, но и для защиты от угроз и эксплойтов. " +
                 "Обновления должны устанавливаться как можно скорее",
-                Detection = new UpdatesServiceDT()
+                Detection = new WindowsUpdatesProblemsDT()
             });
 
             problems.Add(new WindowsOSProblem
@@ -126,7 +129,7 @@ namespace SecurityAdvisor.Infrastructure.Generic
                 Description = "Данное ПО позволяет воспроизводить веб-медиа-контент, однако часто используется злоумышленниками для совершения зловредных действий в " +
                 "системе минуя браузер. Менее 4% сайтов сегодня используют Flash, а браузеры отказываются воспроизводить соответствующий контент с помощью Flash по " +
                 "умолчанию во избежание проблем.",
-                Detection = new FlashAppDT()
+                Detection = new AdobeFlashDT()
             });
         }
 

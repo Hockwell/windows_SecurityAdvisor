@@ -63,19 +63,20 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Infrastructure\Detection\AppsListSearchDT.cs" />
-    <Compile Include="Infrastructure\Detection\FlashAppDT.cs" />
+    <Compile Include="Infrastructure\Detection\AdobeFlashDT.cs" />
     <Compile Include="Infrastructure\Detection\TrustedInternetBrowsersDT.cs" />
     <Compile Include="Infrastructure\Detection\JavaExecutionDT.cs" />
-    <Compile Include="Infrastructure\Detection\TimeDT.cs" />
+    <Compile Include="Infrastructure\Detection\FalseTimeDT.cs" />
     <Compile Include="Infrastructure\Detection\UnauthorizedAccessToOS_DT.cs" />
     <Compile Include="Infrastructure\Generic\DB.cs" />
     <Compile Include="Infrastructure\Detection\BackupAppDT.cs" />
-    <Compile Include="Infrastructure\Detection\UpdatesServiceDT.cs" />
+    <Compile Include="Infrastructure\Detection\WindowsUpdatesProblemsDT.cs" />
     <Compile Include="Infrastructure\FileExport\DetectionReportTXTExport.cs" />
     <Compile Include="Infrastructure\Detection\AntivirusDT.cs" />
     <Compile Include="Infrastructure\Detection\DetectionTechnique.cs" />
     <Compile Include="Infrastructure\Generic\Enums.cs" />
     <Compile Include="Infrastructure\Detection\RegistryDT.cs" />
+    <Compile Include="Infrastructure\Generic\UniversalStringMethods.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
