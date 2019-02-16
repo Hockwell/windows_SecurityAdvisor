@@ -67,6 +67,15 @@ namespace SecurityAdvisor.Infrastructure.Generic
                 Detection = new UEFISecureBootDT()
             });
 
+            problems.Add(new WindowsOSProblem
+            {
+                Name = "BIOS не обновлялся более 2 лет",
+                AdviceForUser = "Обновить BIOS. Пройдите на сайт производители в раздел Поддержка и следуйте инструкциям.",
+                Raiting = ProblemRaiting.Info,
+                Description = "BIOS важно обновлять для защиты от уязвимостей (например, «нашумевшей» Spectre) и обеспечения поддержки нового оборудования.",
+                Detection = new SuspiciousBIOSDateDT()
+            });
+
             problems.Add(new WindowsOSProblem //Не следует в текст вставлять escape-последовательности для выравнивания в 
                                               //файлах txt - он выравнивается с помощью специального метода
             {

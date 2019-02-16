@@ -12,7 +12,7 @@ namespace SecurityAdvisor.Infrastructure.Detection
     {
         public override void Execute()
         {
-            throw new NotImplementedException();
+            
         }
     }
 }

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static SecurityAdvisor.Infrastructure.Generic.UniversalMethods;
 
 namespace SecurityAdvisor.Infrastructure.Detection
 {
@@ -15,11 +16,7 @@ namespace SecurityAdvisor.Infrastructure.Detection
 
         public override void Execute()
         {
-            int enabled;
-            using (RegistryKey key = Registry.LocalMachine.OpenSubKey(PATH))
-            {
-                enabled = (int) key.GetValue(KEY);
-            }
+            int enabled = (int) GetKeyValueFromRegistry(PATH, KEY);
 
             if (IsSecureValue())
             {

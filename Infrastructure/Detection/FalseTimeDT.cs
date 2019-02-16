@@ -1,6 +1,6 @@
 ﻿using System;
 using SecurityAdvisor.Infrastructure.Generic;
-using static SecurityAdvisor.Infrastructure.Generic.UniversalStringMethods;
+using static SecurityAdvisor.Infrastructure.Generic.UniversalMethods;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -35,7 +35,7 @@ namespace SecurityAdvisor.Infrastructure.Detection
                 return;
             }
 
-            TimeSpan timesDelta = new TimeSpan(Math.Abs(timeInOS.Ticks - onlineTime.Ticks));
+            int timesDeltaInDays = CalcTimesDifferenceInDays(timeInOS, onlineTime);
             if (IsDifferentTimes())
             {
                 Status = DetectionStatus.Found;
@@ -47,7 +47,7 @@ namespace SecurityAdvisor.Infrastructure.Detection
                 db.ActualTime = timeInOS;
             }
 
-            bool IsDifferentTimes() => timesDelta.Days >= DAYS_AMOUNT_FOR_TIMES_DIFFERENCE;
+            bool IsDifferentTimes() => timesDeltaInDays >= DAYS_AMOUNT_FOR_TIMES_DIFFERENCE;
 
         }
 
