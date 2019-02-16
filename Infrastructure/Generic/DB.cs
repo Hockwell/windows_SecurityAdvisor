@@ -35,6 +35,7 @@ namespace SecurityAdvisor.Infrastructure.Generic
         private List<WindowsOSProblem> problems;
         private List<string> installedPrograms; //Сохранено именно здесь, чтобы >1 техники могли пользоваться этой информацией
         public DateTime ActualTime { get; set; } = NULL_TIME; //Текущеее актуальное время, с помощью которого программа определяет ряд системных проблем, используя его как точку отсчёта.
+        //Формируется на основе данных из Интернета и локального времени.
 
         private DB()
         {
@@ -53,6 +54,17 @@ namespace SecurityAdvisor.Infrastructure.Generic
                 Raiting = ProblemRaiting.Critical,
                 Description = "Ряд служб ОС и антивирус могут работать неправильно, если время в системе установлено не корректное.",
                 Detection = new FalseTimeDT()
+            });
+
+            problems.Add(new WindowsOSProblem
+            {
+                Name = "Технология UEFI Secure boot не включена",
+                AdviceForUser = @"Попытайтесь включить её в реестре: HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecureBoot\State, UEFISecureBootEnabled = 1. 
+Не все производители UEFI поддерживают её.",
+                Raiting = ProblemRaiting.Recomended,
+                Description = "Технология осуществляет контроль подписей образа загружаемой ОС и драйверов. Если образ будет модифицирован вредоносным ПО (буткит, руткит), " +
+                "то он не загрузится, поскольку вредоносный драйвер будет заблокирован. Предотвращается загрузка как неподписанных данных, так и данных из чёрного списка. ",
+                Detection = new UEFISecureBootDT()
             });
 
             problems.Add(new WindowsOSProblem //Не следует в текст вставлять escape-последовательности для выравнивания в 
@@ -93,12 +105,23 @@ namespace SecurityAdvisor.Infrastructure.Generic
 
             problems.Add(new WindowsOSProblem
             {
-                Name = "Опасные настройки службы обновления Windows",
+                Name = "Не установлены последние обновления Windows",
                 AdviceForUser = "Проверьте настройки, используя Панель управления или Параметры в Windows 10",
                 Raiting = ProblemRaiting.Critical,
                 Description = "Обновления нужны не только для повышения стабильности ОС, но и для защиты от угроз и эксплойтов. " +
                 "Обновления должны устанавливаться как можно скорее",
-                Detection = new WindowsUpdatesProblemsDT()
+                Detection = new OutdatedWindowsUpdatesDT()
+            });
+
+            problems.Add(new WindowsOSProblem
+            {
+                Name = "Не самая новая версия Windows",
+                AdviceForUser = "W10: установите предпоследнее/последение крупное обновление. <W10: установите W10.",
+                Raiting = ProblemRaiting.Recomended,
+                Description = "Чем новее ОС, тем безопаснее. Зачастую невозможно в старые версии ОС включить новейшие " +
+                "механизмы защиты. Более старые ОС в первую очередь поддерживаются лишь для реактивной защиты от эксплойтов " +
+                "путём установки патчей исправления.",
+                Detection = new WindowsVersionTooOldDT()
             });
 
             problems.Add(new WindowsOSProblem

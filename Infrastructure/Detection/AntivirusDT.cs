@@ -39,11 +39,11 @@ namespace SecurityAdvisor.Infrastructure.Detection
         private void CheckFileAvailability()
         {
             int loop = 0;
-            int loopMax = 10; //кол-во секунд на ожидание
+            int loopMax = 3; //*3=кол-во секунд на ожидание
 
             do
             {
-                Thread.Sleep(1000);
+                Thread.Sleep(3000);
                 loop ++;
             }
             while (File.Exists(TEST_FILE_NAME) && loop < loopMax);

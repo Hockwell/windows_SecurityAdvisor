@@ -80,7 +80,7 @@ namespace SecurityAdvisor
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine(e.StackTrace);
+                    Console.WriteLine(e.Message + " " + e.StackTrace);
                     problems[i].Detection.Status = DetectionStatus.Error;
                 }
                 
