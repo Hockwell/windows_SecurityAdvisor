@@ -46,10 +46,11 @@ namespace SecurityAdvisor.Infrastructure.Detection
                 Thread.Sleep(3000);
                 loop ++;
             }
-            while (File.Exists(TEST_FILE_NAME) && loop < loopMax);
+            while (IsRepeatChecking());
 
             Status = (loop == loopMax) ? DetectionStatus.Found : DetectionStatus.NotFound;
 
+            bool IsRepeatChecking() => File.Exists(TEST_FILE_NAME) && loop < loopMax && new FileInfo(TEST_FILE_NAME).Length != 0;
         }
     }
 }

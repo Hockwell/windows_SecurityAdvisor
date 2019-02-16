@@ -30,17 +30,42 @@ namespace SecurityAdvisor.Infrastructure.Generic
         #endregion
 
         #region Data
+        public const float OS_BUILD_DEFAULT_VALUE = -1;
+        public const float OS_VERSION_DEFAULT_VALUE = -1;
         public static readonly DateTime NULL_TIME = new DateTime(0); //У DateTime нет null-значения, поэтому пришлось создать своё
 
         private List<WindowsOSProblem> problems;
         private List<string> installedPrograms; //Сохранено именно здесь, чтобы >1 техники могли пользоваться этой информацией
         public DateTime ActualTime { get; set; } = NULL_TIME; //Текущеее актуальное время, с помощью которого программа определяет ряд системных проблем, используя его как точку отсчёта.
         //Формируется на основе данных из Интернета и локального времени.
+        private float osBuild = OS_BUILD_DEFAULT_VALUE; //17763.316, 17763.194...
+        private float osVersion = OS_VERSION_DEFAULT_VALUE; //7,8, 1803, 1809...
+        private float actualOSBuild;
+        private float[] actualOSVersions;
 
         private DB()
         {
             InitInstalledProgramsList();
+            GetOSBuildAndVersionFromRegistry();
+            GetActualOSBuildAndVersionFromInternet();
             InitProblemsList();
+        }
+
+        private void GetOSBuildAndVersionFromRegistry()
+        {
+            //GetKeyValueFromRegistry(HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion, )
+        }
+
+        private void GetActualOSBuildAndVersionFromInternet()
+        {
+            WindowsUpdatesSiteParser parser = new WindowsUpdatesSiteParser();
+            actualOSBuild = parser.ActualBuild;
+            actualOSVersions = parser.ActualVersions;
+        }
+
+        private void InitInstalledProgramsList()
+        {
+            installedPrograms = AppsListSearchDT.GetInstalledAppNamesList();
         }
 
         private void InitProblemsList()
@@ -73,7 +98,7 @@ namespace SecurityAdvisor.Infrastructure.Generic
                 AdviceForUser = "Обновить BIOS. Пройдите на сайт производители в раздел Поддержка и следуйте инструкциям.",
                 Raiting = ProblemRaiting.Info,
                 Description = "BIOS важно обновлять для защиты от уязвимостей (например, «нашумевшей» Spectre) и обеспечения поддержки нового оборудования.",
-                Detection = new SuspiciousBIOSDateDT()
+                Detection = new OldBIOS_DT()
             });
 
             problems.Add(new WindowsOSProblem //Не следует в текст вставлять escape-последовательности для выравнивания в 
@@ -165,10 +190,6 @@ namespace SecurityAdvisor.Infrastructure.Generic
             });
         }
 
-        private void InitInstalledProgramsList()
-        {
-            installedPrograms = AppsListSearchDT.GetInstalledAppNamesList();
-        }
         #endregion
     }
 }

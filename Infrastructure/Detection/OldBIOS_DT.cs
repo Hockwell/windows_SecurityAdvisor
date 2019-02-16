@@ -9,14 +9,18 @@ using static SecurityAdvisor.Infrastructure.Generic.UniversalMethods;
 
 namespace SecurityAdvisor.Infrastructure.Detection
 {
-    class SuspiciousBIOSDateDT : DetectionTechnique
+    class OldBIOS_DT : DetectionTechnique
     {
         private const string PATH = @"SYSTEM\CurrentControlSet\Control\SystemInformation";
         private const string KEY = "BIOSReleaseDate";
-        private const int TWO_YEARS = 365*2;
+        private const int TWO_YEARS = 365*2*24; //часы
 
         public override void Execute()
         {
+            DateTime actualTime = DB.Load().ActualTime;
+            if (actualTime.Equals(DB.NULL_TIME))
+                throw new Exception("Для работы данной техники нужно запустить BadTimeDT раньше, а не позже!");
+
             string biosDate = (string) GetKeyValueFromRegistry(PATH, KEY);
             DateTime biosDate_DT = DateTime.ParseExact(biosDate, "MM/dd/yyyy", CultureInfo.InvariantCulture);
 
@@ -25,7 +29,7 @@ namespace SecurityAdvisor.Infrastructure.Detection
             else
                 Status = DetectionStatus.Found;
 
-            bool IsTrueDateDifference() => CalcTimesDifferenceInDays(DB.Load().ActualTime, biosDate_DT) <= TWO_YEARS;
+            bool IsTrueDateDifference() => CalcTimesDifferenceInHours(actualTime, biosDate_DT) <= TWO_YEARS;
         }
     }
 }

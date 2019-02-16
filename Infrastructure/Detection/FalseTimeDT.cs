@@ -12,7 +12,7 @@ namespace SecurityAdvisor.Infrastructure.Detection
 {
     class FalseTimeDT : DetectionTechnique
     {
-        private const int DAYS_AMOUNT_FOR_TIMES_DIFFERENCE = 1;
+        private const int HOURS_AMOUNT_FOR_TIMES_DIFFERENCE = 12;
         private const string URI_WITH_TIME = @"http://worldclockapi.com/api/jsonp/cet/now?callback=mycallback";
 
         //Обнаружение происходит путём сверки времени в системе с временем из удалённого источника, если отличается более, чем на 24 часа (пояс не используется), то время
@@ -35,7 +35,7 @@ namespace SecurityAdvisor.Infrastructure.Detection
                 return;
             }
 
-            int timesDeltaInDays = CalcTimesDifferenceInDays(timeInOS, onlineTime);
+            int timesDeltaInDays = CalcTimesDifferenceInHours(timeInOS, onlineTime);
             if (IsDifferentTimes())
             {
                 Status = DetectionStatus.Found;
@@ -47,7 +47,7 @@ namespace SecurityAdvisor.Infrastructure.Detection
                 db.ActualTime = timeInOS;
             }
 
-            bool IsDifferentTimes() => timesDeltaInDays >= DAYS_AMOUNT_FOR_TIMES_DIFFERENCE;
+            bool IsDifferentTimes() => timesDeltaInDays > HOURS_AMOUNT_FOR_TIMES_DIFFERENCE;
 
         }
 

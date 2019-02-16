@@ -64,12 +64,13 @@
     </Compile>
     <Compile Include="Infrastructure\Detection\AppsListSearchDT.cs" />
     <Compile Include="Infrastructure\Detection\AdobeFlashDT.cs" />
-    <Compile Include="Infrastructure\Detection\SuspiciousBIOSDateDT.cs" />
+    <Compile Include="Infrastructure\Detection\OldBIOS_DT.cs" />
     <Compile Include="Infrastructure\Detection\TrustedInternetBrowsersDT.cs" />
     <Compile Include="Infrastructure\Detection\JavaExecutionDT.cs" />
     <Compile Include="Infrastructure\Detection\FalseTimeDT.cs" />
     <Compile Include="Infrastructure\Detection\UEFISecureBootDT.cs" />
     <Compile Include="Infrastructure\Detection\UnauthorizedAccessToOS_DT.cs" />
+    <Compile Include="Infrastructure\Generic\WindowsUpdatesSiteParser.cs" />
     <Compile Include="Infrastructure\Detection\WindowsVersionTooOldDT.cs" />
     <Compile Include="Infrastructure\Generic\DB.cs" />
     <Compile Include="Infrastructure\Detection\BackupAppDT.cs" />

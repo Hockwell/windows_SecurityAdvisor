@@ -22,9 +22,9 @@ namespace SecurityAdvisor.Infrastructure.Generic
             return substring;
         }
 
-        public static int CalcTimesDifferenceInDays(DateTime time1, DateTime time2)
+        public static int CalcTimesDifferenceInHours(DateTime time1, DateTime time2)
         {
-            return new TimeSpan(Math.Abs(time1.Ticks - time2.Ticks)).Days;
+            return new TimeSpan(Math.Abs(time1.Ticks - time2.Ticks)).Hours;
         }
 
         public static object GetKeyValueFromRegistry(string path, string key)
