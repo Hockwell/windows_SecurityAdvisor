@@ -20,7 +20,6 @@ namespace SecurityAdvisor.Infrastructure.Detection
             {
                 throw new Exception("OSBuildValuesNotDetermined");
             }
-                
 
         }
     }

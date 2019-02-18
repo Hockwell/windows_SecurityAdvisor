@@ -58,22 +58,23 @@ namespace SecurityAdvisor.Infrastructure.Generic
         public DateTime ActualTime { get; set; } = ACTUAL_TIME_NULL_VALUE; //Текущеее актуальное время, с помощью которого программа определяет ряд 
         //системных проблем, используя его как точку отсчёта. 
         //Формируется на основе данных из Интернета и установленного в системе путем экпертизы.
-        public float LocalOSBuild { get; private set; } = OS_BUILD_NULL_VALUE; //17763.316, 17763.194...
+        public double LocalOSBuild { get; private set; } = OS_BUILD_NULL_VALUE; //17763.316, 17763.194...
         public float LocalOSVersion { get; private set; } = OS_VERSION_NULL_VALUE; //7,8, 1803, 1809...
         public float ActualOSBuild { get; private set; } = ACTUAL_OS_BUILD_NULL_VALUE;
         public float[] ActualOSVersions { get; private set; } = ACTUAL_OS_VERSION_NULL_VALUE;
 
         private DB()
         {
-            GetInstalledProgramNamesFromRegistry();
+            GetNamesOfInstalledProgramsFromRegistry();
             InitProblemsList();
         }
 
         public void GetLocalOSBuildAndVersionFromRegistry()
         {
-            LocalOSVersion = float.Parse((string) GetKeyValueFromRegistry(@"SOFTWARE\Microsoft\Windows NT\CurrentVersion", "ReleaseId"));
-            LocalOSBuild = float.Parse((string)GetKeyValueFromRegistry(@"SOFTWARE\Microsoft\Windows NT\CurrentVersion", "CurrentBuildNumber") + "," +
-                GetKeyValueFromRegistry(@"SOFTWARE\Microsoft\Windows NT\CurrentVersion", "UBR"));
+            LocalOSVersion = float.Parse(GetKeyValueFromRegistry(@"SOFTWARE\Microsoft\Windows NT\CurrentVersion", "ReleaseId").ToString());
+            string buildNumber = GetKeyValueFromRegistry(@"SOFTWARE\Microsoft\Windows NT\CurrentVersion", "CurrentBuildNumber").ToString();
+            string buildSuffix = GetKeyValueFromRegistry(@"SOFTWARE\Microsoft\Windows NT\CurrentVersion", "UBR").ToString();
+            LocalOSBuild = double.Parse(buildNumber + "," + buildSuffix);
         }
 
         public void GetActualOSBuildAndVersionFromInternet()
@@ -87,7 +88,7 @@ namespace SecurityAdvisor.Infrastructure.Generic
             }
         }
 
-        private void GetInstalledProgramNamesFromRegistry()
+        private void GetNamesOfInstalledProgramsFromRegistry()
         {
             installedPrograms = AppsListSearchDT.GetInstalledAppNamesList();
         }
