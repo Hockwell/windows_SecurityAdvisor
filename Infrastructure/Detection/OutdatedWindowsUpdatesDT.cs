@@ -15,7 +15,12 @@ namespace SecurityAdvisor.Infrastructure.Detection
     {
         public override void Execute()
         {
-            
+            DB db = DB.Load();
+            if (db.IsOSBuildValuesNotDetermined())
+            {
+                throw new Exception("OSBuildValuesNotDetermined");
+            }
+                
 
         }
     }

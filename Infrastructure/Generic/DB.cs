@@ -1,4 +1,5 @@
 ﻿using SecurityAdvisor.Infrastructure.Detection;
+using static SecurityAdvisor.Infrastructure.Generic.UniversalMethods;
 using SecurityAdvisor.Model;
 using System;
 using System.Collections.Generic;
@@ -27,43 +28,66 @@ namespace SecurityAdvisor.Infrastructure.Generic
         {
             return installedPrograms;
         }
+
+        public bool IsActualTimeNotDetermined()
+        {
+            return ActualTime.Equals(ACTUAL_TIME_NULL_VALUE);
+        }
+
+        public bool IsOSBuildValuesNotDetermined()
+        {
+            return LocalOSBuild == OS_BUILD_NULL_VALUE || ActualOSBuild == ACTUAL_OS_BUILD_NULL_VALUE;
+        }
+
+        public bool IsOSVersionValuesNotDetermined()
+        {
+            return LocalOSVersion == OS_VERSION_NULL_VALUE || ActualOSVersions == ACTUAL_OS_VERSION_NULL_VALUE;
+
+        }
         #endregion
 
         #region Data
-        public const float OS_BUILD_DEFAULT_VALUE = -1;
-        public const float OS_VERSION_DEFAULT_VALUE = -1;
-        public static readonly DateTime NULL_TIME = new DateTime(0); //У DateTime нет null-значения, поэтому пришлось создать своё
+        public const float OS_BUILD_NULL_VALUE = -1;
+        public const float OS_VERSION_NULL_VALUE = -1;
+        public const float ACTUAL_OS_BUILD_NULL_VALUE = -2;
+        public static readonly float[] ACTUAL_OS_VERSION_NULL_VALUE = null;
+        public static readonly DateTime ACTUAL_TIME_NULL_VALUE = new DateTime(0); //У DateTime нет null-значения, поэтому пришлось создать своё
 
         private List<WindowsOSProblem> problems;
         private List<string> installedPrograms; //Сохранено именно здесь, чтобы >1 техники могли пользоваться этой информацией
-        public DateTime ActualTime { get; set; } = NULL_TIME; //Текущеее актуальное время, с помощью которого программа определяет ряд системных проблем, используя его как точку отсчёта.
-        //Формируется на основе данных из Интернета и локального времени.
-        private float osBuild = OS_BUILD_DEFAULT_VALUE; //17763.316, 17763.194...
-        private float osVersion = OS_VERSION_DEFAULT_VALUE; //7,8, 1803, 1809...
-        private float actualOSBuild;
-        private float[] actualOSVersions;
+        public DateTime ActualTime { get; set; } = ACTUAL_TIME_NULL_VALUE; //Текущеее актуальное время, с помощью которого программа определяет ряд 
+        //системных проблем, используя его как точку отсчёта. 
+        //Формируется на основе данных из Интернета и установленного в системе путем экпертизы.
+        public float LocalOSBuild { get; private set; } = OS_BUILD_NULL_VALUE; //17763.316, 17763.194...
+        public float LocalOSVersion { get; private set; } = OS_VERSION_NULL_VALUE; //7,8, 1803, 1809...
+        public float ActualOSBuild { get; private set; } = ACTUAL_OS_BUILD_NULL_VALUE;
+        public float[] ActualOSVersions { get; private set; } = ACTUAL_OS_VERSION_NULL_VALUE;
 
         private DB()
         {
-            InitInstalledProgramsList();
-            GetOSBuildAndVersionFromRegistry();
-            GetActualOSBuildAndVersionFromInternet();
+            GetInstalledProgramNamesFromRegistry();
             InitProblemsList();
         }
 
-        private void GetOSBuildAndVersionFromRegistry()
+        public void GetLocalOSBuildAndVersionFromRegistry()
         {
-            //GetKeyValueFromRegistry(HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion, )
+            LocalOSVersion = float.Parse((string) GetKeyValueFromRegistry(@"SOFTWARE\Microsoft\Windows NT\CurrentVersion", "ReleaseId"));
+            LocalOSBuild = float.Parse((string)GetKeyValueFromRegistry(@"SOFTWARE\Microsoft\Windows NT\CurrentVersion", "CurrentBuildNumber") + "," +
+                GetKeyValueFromRegistry(@"SOFTWARE\Microsoft\Windows NT\CurrentVersion", "UBR"));
         }
 
-        private void GetActualOSBuildAndVersionFromInternet()
+        public void GetActualOSBuildAndVersionFromInternet()
         {
             WindowsUpdatesSiteParser parser = new WindowsUpdatesSiteParser();
-            actualOSBuild = parser.ActualBuild;
-            actualOSVersions = parser.ActualVersions;
+
+            if (parser.Run()) //Если парсер отработал неудачно, то обновлять значения ни к чему.
+            {
+                ActualOSBuild = parser.ActualBuild;
+                ActualOSVersions = parser.ActualVersions;
+            }
         }
 
-        private void InitInstalledProgramsList()
+        private void GetInstalledProgramNamesFromRegistry()
         {
             installedPrograms = AppsListSearchDT.GetInstalledAppNamesList();
         }
@@ -72,7 +96,7 @@ namespace SecurityAdvisor.Infrastructure.Generic
         {
             problems = new List<WindowsOSProblem>();
 
-            problems.Add(new WindowsOSProblem
+            problems.Add(new WindowsOSProblem //FalseTimeDT должна быть на нулевом месте списка, ибо она должна исполняться раньше всех
             {
                 Name = "Неверное время в системе",
                 AdviceForUser = "Установите правильно время, включите автоматическое определение часового пояса и времени в Параметрах/Панели управления Windows",

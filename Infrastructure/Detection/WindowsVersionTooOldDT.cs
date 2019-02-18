@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SecurityAdvisor.Infrastructure.Generic;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,7 +13,12 @@ namespace SecurityAdvisor.Infrastructure.Detection
     {
         public override void Execute()
         {
-            
+            DB db = DB.Load();
+            if (db.IsOSVersionValuesNotDetermined())
+            {
+                throw new Exception("OSVersionValuesNotDetermined");
+            }
+                
         }
     }
 }

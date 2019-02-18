@@ -35,7 +35,7 @@ namespace SecurityAdvisor.Infrastructure.Detection
                 return;
             }
 
-            int timesDeltaInDays = CalcTimesDifferenceInHours(timeInOS, onlineTime);
+            double timesDeltaInDays = CalcTimesDifferenceInHours(timeInOS, onlineTime);
             if (IsDifferentTimes())
             {
                 Status = DetectionStatus.Found;
@@ -57,7 +57,7 @@ namespace SecurityAdvisor.Infrastructure.Detection
 
             string json = web.DownloadString(URI_WITH_TIME);
             int referencePoint = json.IndexOf('+'); //Ищем в mycallback({"$id":"1","currentDateTime":"2019-02-14T16:24+01:00","u...
-            string onlineTime = GetSubstringByReferencePoint(referencePoint, json, 16, 10) + " " + GetSubstringByReferencePoint(referencePoint, json, 5, 5);
+            string onlineTime = GetSubstringByReferencePoint(referencePoint, json, 16, 10) + " " + GetSubstringByReferencePoint(referencePoint, json, 5, 5); //[suspicious] Сделай библиотечными
             DateTime onlineTime_DT = DateTime.ParseExact(onlineTime, "yyyy-MM-dd HH:mm", null);
             
             return onlineTime_DT;

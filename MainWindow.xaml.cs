@@ -1,6 +1,7 @@
 ﻿using SecurityAdvisor.Infrastructure;
 using SecurityAdvisor.Infrastructure.FileExport;
 using SecurityAdvisor.Infrastructure.Generic;
+using static SecurityAdvisor.Infrastructure.Generic.UniversalMethods;
 using SecurityAdvisor.Model;
 using System;
 using System.Collections.Generic;
@@ -59,7 +60,7 @@ namespace SecurityAdvisor
             catch (Exception e)
             {
                 MessageBox.Show(e.Message, "Возникла ошибка", MessageBoxButton.OK, MessageBoxImage.Warning);
-                Console.WriteLine(e.StackTrace);
+                ShowConsoleMessagesAboutException(e);
                 CloseApp();
             }
         }
@@ -72,19 +73,40 @@ namespace SecurityAdvisor
 
         private void DetectProblems()
         {
-            for (int i = 0; i < problems.Count; i++)
+            //Зачем отделять FalseTimeDT от других проблем и запускать раньше всех? По той причине, что на основе актуального времени работают подготовительные 
+            //операции в БД и после этого выполняются остальные детектирующие техники
+
+            if (!(problems[0].Detection is Infrastructure.Detection.FalseTimeDT))
+                throw new Exception("FalseTimeDT должно содержаться в БД на нулевом месте => исполняться раньше всех");
+
+            DetectProblem(0);//FalseTimeDT
+
+            try
             {
-                try
-                {
-                    problems[i].Detection.Execute();
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine(e.Message);
-                    Console.WriteLine(e.StackTrace);
-                    problems[i].Detection.Status = DetectionStatus.Error;
-                }
-                
+                db.GetLocalOSBuildAndVersionFromRegistry();
+                db.GetActualOSBuildAndVersionFromInternet();
+            }
+            catch (Exception e)
+            {
+                ShowConsoleMessagesAboutException(e);
+            }
+            
+            for (int i = 1; i < problems.Count; i++)
+            {
+                DetectProblem(i);
+            }     
+        }
+
+        private void DetectProblem(int problemIndex)
+        {
+            try
+            {
+                problems[problemIndex].Detection.Execute();
+            }
+            catch (Exception e)
+            {
+                ShowConsoleMessagesAboutException(e);
+                problems[problemIndex].Detection.Status = DetectionStatus.Error;
             }
         }
 

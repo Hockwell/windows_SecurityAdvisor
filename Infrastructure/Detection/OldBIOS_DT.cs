@@ -17,9 +17,10 @@ namespace SecurityAdvisor.Infrastructure.Detection
 
         public override void Execute()
         {
-            DateTime actualTime = DB.Load().ActualTime;
-            if (actualTime.Equals(DB.NULL_TIME))
-                throw new Exception("Для работы данной техники нужно запустить BadTimeDT раньше, а не позже!");
+            DB db = DB.Load();
+
+            if (db.IsActualTimeNotDetermined())
+                throw new Exception("Для работы данной техники нужно запустить FalseTimeDT раньше, а не позже!");
 
             string biosDate = (string) GetKeyValueFromRegistry(PATH, KEY);
             DateTime biosDate_DT = DateTime.ParseExact(biosDate, "MM/dd/yyyy", CultureInfo.InvariantCulture);
@@ -29,7 +30,7 @@ namespace SecurityAdvisor.Infrastructure.Detection
             else
                 Status = DetectionStatus.Found;
 
-            bool IsTrueDateDifference() => CalcTimesDifferenceInHours(actualTime, biosDate_DT) <= TWO_YEARS;
+            bool IsTrueDateDifference() => CalcTimesDifferenceInHours(db.ActualTime, biosDate_DT) <= TWO_YEARS;
         }
     }
 }

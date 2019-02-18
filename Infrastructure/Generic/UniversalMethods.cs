@@ -22,9 +22,9 @@ namespace SecurityAdvisor.Infrastructure.Generic
             return substring;
         }
 
-        public static int CalcTimesDifferenceInHours(DateTime time1, DateTime time2)
+        public static double CalcTimesDifferenceInHours(DateTime time1, DateTime time2)
         {
-            return new TimeSpan(Math.Abs(time1.Ticks - time2.Ticks)).Hours;
+            return new TimeSpan(Math.Abs(time1.Ticks - time2.Ticks)).TotalHours;
         }
 
         public static object GetKeyValueFromRegistry(string path, string key)
@@ -35,6 +35,12 @@ namespace SecurityAdvisor.Infrastructure.Generic
                 value = branch.GetValue(key);
             }
             return value;
+        }
+
+        public static void ShowConsoleMessagesAboutException(Exception e)
+        {
+            Console.WriteLine(e.Message);
+            Console.WriteLine(e.StackTrace);
         }
     }
 }
