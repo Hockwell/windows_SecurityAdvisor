@@ -22,18 +22,27 @@ namespace SecurityAdvisor.Infrastructure.Detection
                 throw new Exception("OSVersionValuesNotDetermined");
             }
 
-            bool IsNot10Version = SUPPORTED_OLD_OS_VERSIONS.Contains(db.LocalOSVersion);
-            bool IsActualW10Version = db.ActualW10Versions.Contains((int)db.LocalOSVersion);
-
-
-            if (IsNot10Version)
+            if (IsNotW10OnComputer())
             {
                 Status = DetectionStatus.Found;
             }
-            else if (IsActualW10Version)
+            else if (IsActualW10OnComputer())
             {
                 Status = DetectionStatus.NotFound;
             }
+            else if (IsNotActualW10OnComputer())
+            {
+                Status = DetectionStatus.Found;
+            }
+            else //actual1 < version < actual2, version > actual2 
+            {
+                Status = DetectionStatus.Error;
+                throw new Exception("Парсер сломался или сайт об обновлениях более не актуален");
+            }
+
+            bool IsNotW10OnComputer() => SUPPORTED_OLD_OS_VERSIONS.Contains(db.LocalOSVersion);
+            bool IsActualW10OnComputer() => db.ActualW10Versions.Contains((int)db.LocalOSVersion);
+            bool IsNotActualW10OnComputer() => db.LocalOSVersion < db.ActualW10Versions.Min();
         }
     }
 }
