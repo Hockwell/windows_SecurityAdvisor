@@ -7,31 +7,31 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using System.Text.RegularExpressions;
+using SecurityAdvisor.Infrastructure.Detection;
 
 namespace SecurityAdvisor.Infrastructure.Generic
 {
     class WindowsUpdatesSiteParser
     {
+        public const int W10_UPDATES_BRANCHES_AMOUNT = 3; //Current Branch (CB), LTSB, Current Branch for Business (CBB)
+        private const string EXC_MSG_W10_VERSION_NOT_PARSED = "Номер версии W10 не распознан на сайте.";
         private const string URI = @"https://winreleaseinfoprod.blob.core.windows.net/winreleaseinfoprod/en-US.html";
 
-        public float ActualBuild { get; set; }
-        public float[] ActualVersions { get; set; } //Их 2, на февраль 2019 1803 и 1809
-
         private CQ dom;
+        private DB db = DB.Load();
 
-        public bool Run()
+        public void ParseAndInitDBFields()
         {
             try
             {
                 GetPageInHTML();
                 CheckSiteRelevance();
-                //ParseActualVersions();
-                return true;
+                ParseActualVersions();
             }
             catch (Exception e)
             {
                 ShowConsoleMessagesAboutException(e);
-                return false;
             }
         }
 
@@ -76,8 +76,36 @@ namespace SecurityAdvisor.Infrastructure.Generic
 
         private void ParseActualVersions()
         {
-            string versionsTable = dom["div > table > tbody"].Text();
+            string versionsTable = dom["div > table > tbody"].Eq(0).Text();
+            Match m = Regex.Match(versionsTable, @"\s\d{4}\s");
+            if (!m.Success)
+                throw new Exception(EXC_MSG_W10_VERSION_NOT_PARSED);
+            db.ActualW10Versions = new List<int>(WindowsVersionTooOldDT.W10_ACTUAL_VERSIONS_AMOUNT);
 
+            int lastVersion = int.Parse(m.Value); //Верхняя версия в таблице - последняя выпущенная
+            db.ActualW10Versions.Add(lastVersion);
+
+            FindAndParsePenultimateVersion(m, lastVersion); //Ищем вторую актуальную версию W10 - ниже последней выпущенной версии
+        }
+
+        private void FindAndParsePenultimateVersion(Match m, int lastVersion)
+        {
+            for (int i = 0; i < (WindowsVersionTooOldDT.W10_ACTUAL_VERSIONS_AMOUNT - 1) * W10_UPDATES_BRANCHES_AMOUNT; i++) //-1, ибо одно значение уже нашли
+            {
+                m = m.NextMatch();
+                if (!m.Success)
+                    throw new Exception(EXC_MSG_W10_VERSION_NOT_PARSED);
+                int penultimateVersion = int.Parse(m.Value); 
+                if (lastVersion < penultimateVersion)
+                {
+                    throw new Exception("Не верно определены версии W10.");
+                }
+                else if (lastVersion > penultimateVersion)
+                {
+                    db.ActualW10Versions.Add(penultimateVersion);
+                    break;
+                }
+            }
         }
     }
 }

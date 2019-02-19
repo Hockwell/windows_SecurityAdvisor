@@ -36,12 +36,12 @@ namespace SecurityAdvisor.Infrastructure.Generic
 
         public bool IsOSBuildValuesNotDetermined()
         {
-            return LocalOSBuild == OS_BUILD_NULL_VALUE || ActualOSBuild == ACTUAL_OS_BUILD_NULL_VALUE;
+            return LocalOSBuild == OS_BUILD_NULL_VALUE || LastW10Build == LAST_W10_BUILD_NULL_VALUE;
         }
 
         public bool IsOSVersionValuesNotDetermined()
         {
-            return LocalOSVersion == OS_VERSION_NULL_VALUE || ActualOSVersions == ACTUAL_OS_VERSION_NULL_VALUE;
+            return LocalOSVersion == OS_VERSION_NULL_VALUE || ActualW10Versions == ACTUAL_W10_VERSION_NULL_VALUE;
 
         }
         #endregion
@@ -49,8 +49,8 @@ namespace SecurityAdvisor.Infrastructure.Generic
         #region Data
         public const float OS_BUILD_NULL_VALUE = -1;
         public const float OS_VERSION_NULL_VALUE = -1;
-        public const float ACTUAL_OS_BUILD_NULL_VALUE = -2;
-        public static readonly float[] ACTUAL_OS_VERSION_NULL_VALUE = null;
+        public const float LAST_W10_BUILD_NULL_VALUE = -2;
+        public static readonly List<int> ACTUAL_W10_VERSION_NULL_VALUE = null;
         public static readonly DateTime ACTUAL_TIME_NULL_VALUE = new DateTime(0); //У DateTime нет null-значения, поэтому пришлось создать своё
 
         private List<WindowsOSProblem> problems;
@@ -59,9 +59,9 @@ namespace SecurityAdvisor.Infrastructure.Generic
         //системных проблем, используя его как точку отсчёта. 
         //Формируется на основе данных из Интернета и установленного в системе путем экпертизы.
         public double LocalOSBuild { get; private set; } = OS_BUILD_NULL_VALUE; //17763.316, 17763.194...
-        public float LocalOSVersion { get; private set; } = OS_VERSION_NULL_VALUE; //7,8, 1803, 1809...
-        public float ActualOSBuild { get; private set; } = ACTUAL_OS_BUILD_NULL_VALUE;
-        public float[] ActualOSVersions { get; private set; } = ACTUAL_OS_VERSION_NULL_VALUE;
+        public float LocalOSVersion { get; private set; } = OS_VERSION_NULL_VALUE; //7,8, 8.1, 1803, 1809...
+        public float LastW10Build { get; set; } = LAST_W10_BUILD_NULL_VALUE;
+        public List<int> ActualW10Versions { get; set; } = ACTUAL_W10_VERSION_NULL_VALUE;
 
         private DB()
         {
@@ -79,13 +79,7 @@ namespace SecurityAdvisor.Infrastructure.Generic
 
         public void GetActualOSBuildAndVersionFromInternet()
         {
-            WindowsUpdatesSiteParser parser = new WindowsUpdatesSiteParser();
-
-            if (parser.Run()) //Если парсер отработал неудачно, то обновлять значения ни к чему.
-            {
-                ActualOSBuild = parser.ActualBuild;
-                ActualOSVersions = parser.ActualVersions;
-            }
+            new WindowsUpdatesSiteParser().ParseAndInitDBFields();
         }
 
         private void GetNamesOfInstalledProgramsFromRegistry()
