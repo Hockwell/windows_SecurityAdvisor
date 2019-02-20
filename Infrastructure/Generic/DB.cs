@@ -79,7 +79,7 @@ namespace SecurityAdvisor.Infrastructure.Generic
             installedPrograms = AppsListSearchDT.GetInstalledAppNamesList();
         }
 
-        private void InitProblemsList() //Некоторые техники должны располагаться относительно других в определённом месте, ибо они зависит работа других или наоборот
+        private void InitProblemsList() //Некоторые техники должны располагаться в определённом месте, ибо их индексы идентифицируют их, от них зависит работа других техник или наоборот
         {
             problems = new List<WindowsOSProblem>();
 
@@ -90,6 +90,27 @@ namespace SecurityAdvisor.Infrastructure.Generic
                 Raiting = ProblemRaiting.Critical,
                 Description = "Ряд служб ОС и антивирус могут работать неправильно, если время в системе установлено не корректное.",
                 Detection = new FalseTimeDT()
+            });
+
+            problems.Add(new WindowsOSProblem
+            {
+                Name = "Не самая новая версия Windows",
+                AdviceForUser = "W10: установите предпоследнее/последение крупное обновление. <W10: установите W10.",
+                Raiting = ProblemRaiting.Recomended,
+                Description = "Чем новее ОС, тем безопаснее. Зачастую невозможно в старые версии ОС включить новейшие " +
+                "механизмы защиты. Более старые ОС в первую очередь поддерживаются лишь для реактивной защиты от эксплойтов " +
+                "путём установки патчей исправления.",
+                Detection = new WindowsVersionTooOldDT()
+            });
+
+            problems.Add(new WindowsOSProblem
+            {
+                Name = "Не установлены последние обновления Windows",
+                AdviceForUser = "Проверьте настройки, используя Панель управления или Параметры в Windows 10",
+                Raiting = ProblemRaiting.Critical,
+                Description = "Обновления нужны не только для повышения стабильности ОС, но и для защиты от угроз и эксплойтов. " +
+                "Обновления должны устанавливаться как можно скорее",
+                Detection = new OutdatedW10UpdatesDT()
             });
 
             problems.Add(new WindowsOSProblem
@@ -147,28 +168,7 @@ namespace SecurityAdvisor.Infrastructure.Generic
                 "обновляются и имеют слаженный оперативный процесс поиска и исправления уязвимостей.",
                 Detection = new TrustedInternetBrowsersDT()
             });
-
-            problems.Add(new WindowsOSProblem
-            {
-                Name = "Не установлены последние обновления Windows",
-                AdviceForUser = "Проверьте настройки, используя Панель управления или Параметры в Windows 10",
-                Raiting = ProblemRaiting.Critical,
-                Description = "Обновления нужны не только для повышения стабильности ОС, но и для защиты от угроз и эксплойтов. " +
-                "Обновления должны устанавливаться как можно скорее",
-                Detection = new OutdatedWindowsUpdatesDT()
-            });
-
-            problems.Add(new WindowsOSProblem
-            {
-                Name = "Не самая новая версия Windows",
-                AdviceForUser = "W10: установите предпоследнее/последение крупное обновление. <W10: установите W10.",
-                Raiting = ProblemRaiting.Recomended,
-                Description = "Чем новее ОС, тем безопаснее. Зачастую невозможно в старые версии ОС включить новейшие " +
-                "механизмы защиты. Более старые ОС в первую очередь поддерживаются лишь для реактивной защиты от эксплойтов " +
-                "путём установки патчей исправления.",
-                Detection = new WindowsVersionTooOldDT()
-            });
-
+           
             problems.Add(new WindowsOSProblem
             {
                 Name = "Установлено ПО Java для исполнения программ на данном языке",

@@ -77,9 +77,9 @@ namespace SecurityAdvisor
             //операции в БД и после этого выполняются остальные детектирующие техники
 
             if (!(problems[0].Detection is Infrastructure.Detection.FalseTimeDT))
-                throw new Exception("FalseTimeDT должно содержаться в БД на нулевом месте => исполняться раньше всех");
+                throw new Exception("FalseTimeDT должно содержаться в БД на 0 месте - его инфа нужна остальным техникам и вспомогательным операциям");
 
-            DetectProblem(0);//FalseTimeDT
+            DetectProblem(0);
 
             try
             {
@@ -90,11 +90,11 @@ namespace SecurityAdvisor
             {
                 ShowConsoleMessagesAboutException(e);
             }
-            
+
             for (int i = 1; i < problems.Count; i++)
             {
                 DetectProblem(i);
-            }     
+            }
         }
 
         private void DetectProblem(int problemIndex)
