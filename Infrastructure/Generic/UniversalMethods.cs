@@ -23,11 +23,5 @@ namespace SecurityAdvisor.Infrastructure.Generic
             }
             return value;
         }
-
-        public static void ShowConsoleMessagesAboutException(Exception e)
-        {
-            Console.WriteLine(e.Message);
-            Console.WriteLine(e.StackTrace);
-        }
     }
 }

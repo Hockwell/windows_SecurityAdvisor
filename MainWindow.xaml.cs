@@ -18,6 +18,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.IO;
 
 namespace SecurityAdvisor
 {
@@ -39,6 +40,8 @@ namespace SecurityAdvisor
 
         private void Check_Btn_Click(object sender, RoutedEventArgs e)
         {
+            CleanupExcessFiles();
+
             Check_Btn.IsEnabled = false;
             progressBar.Visibility = Visibility.Visible;
 
@@ -46,6 +49,11 @@ namespace SecurityAdvisor
             asyncJob.BeginInvoke(null, null);
 
             
+        }
+
+        private void CleanupExcessFiles()
+        {
+            File.Delete(Exceptions.ERRORS_LOG_FILE_NAME);
         }
 
         private void MainJob()
@@ -60,7 +68,7 @@ namespace SecurityAdvisor
             catch (Exception e)
             {
                 MessageBox.Show(e.Message, "Возникла ошибка", MessageBoxButton.OK, MessageBoxImage.Warning);
-                ShowConsoleMessagesAboutException(e);
+                Exceptions.PrintInfoAboutException(e);
                 CloseApp();
             }
         }
@@ -88,7 +96,7 @@ namespace SecurityAdvisor
             }
             catch (Exception e)
             {
-                ShowConsoleMessagesAboutException(e);
+                Exceptions.PrintInfoAboutException(e);
             }
 
             for (int i = 1; i < problems.Count; i++)
@@ -105,7 +113,7 @@ namespace SecurityAdvisor
             }
             catch (Exception e)
             {
-                ShowConsoleMessagesAboutException(e);
+                Exceptions.PrintInfoAboutException(e);
                 problems[problemIndex].Detection.Status = DetectionStatus.Error;
             }
         }

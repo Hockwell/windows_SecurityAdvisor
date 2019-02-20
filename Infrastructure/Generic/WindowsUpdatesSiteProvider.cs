@@ -28,7 +28,7 @@ namespace SecurityAdvisor.Infrastructure.Generic
             }
             catch (Exception e)
             {
-                ShowConsoleMessagesAboutException(e);
+                Exceptions.PrintInfoAboutException(e);
                 return false;
             }
         }
