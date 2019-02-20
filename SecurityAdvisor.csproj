@@ -73,7 +73,8 @@
     <Compile Include="Infrastructure\Detection\FalseTimeDT.cs" />
     <Compile Include="Infrastructure\Detection\UEFISecureBootDT.cs" />
     <Compile Include="Infrastructure\Detection\UnauthorizedAccessToOS_DT.cs" />
-    <Compile Include="Infrastructure\Generic\WindowsUpdatesSiteParser.cs" />
+    <Compile Include="Infrastructure\Generic\Exceptions.cs" />
+    <Compile Include="Infrastructure\Generic\WindowsUpdatesSiteProvider.cs" />
     <Compile Include="Infrastructure\Detection\WindowsVersionTooOldDT.cs" />
     <Compile Include="Infrastructure\Generic\DB.cs" />
     <Compile Include="Infrastructure\Detection\BackupAppDT.cs" />

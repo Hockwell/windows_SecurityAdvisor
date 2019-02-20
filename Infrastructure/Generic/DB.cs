@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using CsQuery;
 
 namespace SecurityAdvisor.Infrastructure.Generic
 {
@@ -33,24 +34,12 @@ namespace SecurityAdvisor.Infrastructure.Generic
         {
             return ActualTime.Equals(ACTUAL_TIME_NULL_VALUE);
         }
-
-        public bool IsOSBuildValuesNotDetermined()
-        {
-            return LocalOSBuild == OS_BUILD_NULL_VALUE || LastW10Build == LAST_W10_BUILD_NULL_VALUE;
-        }
-
-        public bool IsOSVersionValuesNotDetermined()
-        {
-            return LocalOSVersion == OS_VERSION_NULL_VALUE || ActualW10Versions == ACTUAL_W10_VERSION_NULL_VALUE;
-
-        }
         #endregion
 
         #region Data
-        public const float OS_BUILD_NULL_VALUE = -1;
-        public const float OS_VERSION_NULL_VALUE = -1;
-        public const float LAST_W10_BUILD_NULL_VALUE = -2;
-        public static readonly List<int> ACTUAL_W10_VERSION_NULL_VALUE = null;
+        public const float LOCAL_OS_BUILD_NULL_VALUE = -1;
+        public const float LOCAL_OS_VERSION_NULL_VALUE = -1;
+        public const CQ WINDOWS_UPDATES_SITE_DOM_NULL_VALUE = null;
         public static readonly DateTime ACTUAL_TIME_NULL_VALUE = new DateTime(0); //У DateTime нет null-значения, поэтому пришлось создать своё
 
         private List<WindowsOSProblem> problems;
@@ -58,10 +47,9 @@ namespace SecurityAdvisor.Infrastructure.Generic
         public DateTime ActualTime { get; set; } = ACTUAL_TIME_NULL_VALUE; //Текущеее актуальное время, с помощью которого программа определяет ряд 
         //системных проблем, используя его как точку отсчёта. 
         //Формируется на основе данных из Интернета и установленного в системе путем экпертизы.
-        public double LocalOSBuild { get; private set; } = OS_BUILD_NULL_VALUE; //17763.316, 17763.194...
-        public float LocalOSVersion { get; private set; } = OS_VERSION_NULL_VALUE; //7,8, 8.1, 1803, 1809...
-        public float LastW10Build { get; set; } = LAST_W10_BUILD_NULL_VALUE;
-        public List<int> ActualW10Versions { get; set; } = ACTUAL_W10_VERSION_NULL_VALUE;
+        public double LocalOSBuild { get; private set; } = LOCAL_OS_BUILD_NULL_VALUE; //17763.316, 17763.194...
+        public float LocalOSVersion { get; private set; } = LOCAL_OS_VERSION_NULL_VALUE; //7,8, 8.1, 1803, 1809...
+        public CQ WindowsUpdatesSite_DOM { get; set; } = WINDOWS_UPDATES_SITE_DOM_NULL_VALUE; //Для парсеров техник детектирования
 
         private DB()
         {
@@ -77,9 +65,13 @@ namespace SecurityAdvisor.Infrastructure.Generic
             LocalOSBuild = double.Parse(buildNumber + "," + buildSuffix);
         }
 
-        public void GetActualOSBuildAndVersionFromInternet()
+        public void GetLastOSBuildAndActualVersionFromInternet()
         {
-            new WindowsUpdatesSiteParser().ParseAndInitDBFields();
+            WindowsUpdatesSiteProvider site = new WindowsUpdatesSiteProvider();
+            if (site.GetSiteDOMAndCheckSiteRelevance()) //Значения меняются с null-значений только если сайт опознан и актуален
+            {
+                WindowsUpdatesSite_DOM = site.DOM;
+            }
         }
 
         private void GetNamesOfInstalledProgramsFromRegistry()
@@ -87,7 +79,7 @@ namespace SecurityAdvisor.Infrastructure.Generic
             installedPrograms = AppsListSearchDT.GetInstalledAppNamesList();
         }
 
-        private void InitProblemsList()
+        private void InitProblemsList() //Некоторые техники должны располагаться относительно других в определённом месте, ибо они зависит работа других или наоборот
         {
             problems = new List<WindowsOSProblem>();
 

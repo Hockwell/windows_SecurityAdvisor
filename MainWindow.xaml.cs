@@ -84,7 +84,7 @@ namespace SecurityAdvisor
             try
             {
                 db.GetLocalOSBuildAndVersionFromRegistry();
-                db.GetActualOSBuildAndVersionFromInternet();
+                db.GetLastOSBuildAndActualVersionFromInternet();
             }
             catch (Exception e)
             {
