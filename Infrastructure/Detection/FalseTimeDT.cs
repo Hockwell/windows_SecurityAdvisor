@@ -58,6 +58,8 @@ namespace SecurityAdvisor.Infrastructure.Detection
 
             string json = web.DownloadString(URI_WITH_TIME);
             Match onlineTimeMatch = Regex.Match(json, @"\d{4}-\d{2}-\d{2}T\d{2}:\d{2}"); //Ищем в mycallback({"$id":"1","currentDateTime":"2019-02-14T16:24+01:00","u...
+            if (!onlineTimeMatch.Success)
+                throw new Exception("Регулярное выражение не обнаружило дату и время в json-е");
             string onlineTime = onlineTimeMatch.Value.Replace('T',' ');
             DateTime onlineTime_DT = DateTime.ParseExact(onlineTime, "yyyy-MM-dd HH:mm", null);
             
