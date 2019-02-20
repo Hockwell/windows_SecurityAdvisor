@@ -57,8 +57,8 @@ namespace SecurityAdvisor.Infrastructure.Detection
             WebClient web = new WebClient { Proxy = null };
 
             string json = web.DownloadString(URI_WITH_TIME);
-            Match m = Regex.Match(json, @"\d{4}-\d{2}-\d{2}T\d{2}:\d{2}"); //Ищем в mycallback({"$id":"1","currentDateTime":"2019-02-14T16:24+01:00","u...
-            string onlineTime = m.Value.Replace('T',' ');
+            Match onlineTimeMatch = Regex.Match(json, @"\d{4}-\d{2}-\d{2}T\d{2}:\d{2}"); //Ищем в mycallback({"$id":"1","currentDateTime":"2019-02-14T16:24+01:00","u...
+            string onlineTime = onlineTimeMatch.Value.Replace('T',' ');
             DateTime onlineTime_DT = DateTime.ParseExact(onlineTime, "yyyy-MM-dd HH:mm", null);
             
             return onlineTime_DT;
