@@ -9,19 +9,6 @@ namespace SecurityAdvisor.Infrastructure.Generic
 {
     static class UniversalMethods
     {
-        //Метод возвращает подстроку из строки на основе опорного индекса строки, дистанции, на которой располагается начало подстроки от опорного индекса и длины подстроки
-        public static string GetSubstringByReferencePoint(int referencePoint, string @string, int distanceFromReferencePoint, int substringLength)
-        {
-            string substring = string.Empty;
-
-            for (int i = distanceFromReferencePoint; i > distanceFromReferencePoint - substringLength; i--)
-            {
-                substring += @string[referencePoint - i];
-            }
-
-            return substring;
-        }
-
         public static double CalcTimesDifferenceInHours(DateTime time1, DateTime time2)
         {
             return new TimeSpan(Math.Abs(time1.Ticks - time2.Ticks)).TotalHours;
