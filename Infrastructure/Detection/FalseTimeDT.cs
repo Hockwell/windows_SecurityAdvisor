@@ -33,6 +33,7 @@ namespace SecurityAdvisor.Infrastructure.Detection
             {
                 db.ActualTime = timeInOS;
                 Status = DetectionStatus.Error;
+                Exceptions.PrintInfoAboutException(e);
                 return;
             }
 
