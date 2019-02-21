@@ -24,8 +24,6 @@ namespace SecurityAdvisor.Infrastructure.Detection
         {
             db = DB.Load();
 
-            if (db.WindowsUpdatesSite_DOM == DB.WINDOWS_UPDATES_SITE_DOM_NULL_VALUE)
-                throw new Exception(Exceptions.MSG_DOM_NOT_INIT_IN_DB);
             if (db.LocalOSVersion == DB.LOCAL_OS_VERSION_NULL_VALUE)
                 throw new Exception("Билд системы не был получен");
 
@@ -34,6 +32,9 @@ namespace SecurityAdvisor.Infrastructure.Detection
                 Status = DetectionStatus.Found;
                 return;
             }
+
+            if (db.WindowsUpdatesSite_DOM == DB.WINDOWS_UPDATES_SITE_DOM_NULL_VALUE)
+                throw new Exception(Exceptions.MSG_DOM_NOT_INIT_IN_DB);
 
             ParseW10ActualVersions();
 
