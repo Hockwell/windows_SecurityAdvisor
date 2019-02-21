@@ -94,7 +94,7 @@ namespace SecurityAdvisor.Infrastructure.Generic
 
             problems.Add(new WindowsOSProblem
             {
-                Name = "Не самая новая версия Windows",
+                Name = "Не самая безопасная версия Windows",
                 AdviceForUser = "W10: установите предпоследнее/последение крупное обновление. <W10: установите W10.",
                 Raiting = ProblemRaiting.Recomended,
                 Description = "Чем новее ОС, тем безопаснее. Зачастую невозможно в старые версии ОС включить новейшие " +
@@ -105,7 +105,7 @@ namespace SecurityAdvisor.Infrastructure.Generic
 
             problems.Add(new WindowsOSProblem
             {
-                Name = "Не установлены последние обновления Windows",
+                Name = "Не установлено последнее обновление Windows 10",
                 AdviceForUser = "Проверьте настройки, используя Панель управления или Параметры в Windows 10",
                 Raiting = ProblemRaiting.Critical,
                 Description = "Обновления нужны не только для повышения стабильности ОС, но и для защиты от угроз и эксплойтов. " +
