@@ -105,7 +105,7 @@ namespace SecurityAdvisor.Infrastructure.Generic
 
             problems.Add(new WindowsOSProblem
             {
-                Name = "Не установлено последнее обновление Windows 10",
+                Name = "Не установлено последнее обновление для текущей версии Windows 10",
                 AdviceForUser = "Проверьте настройки, используя Панель управления или Параметры в Windows 10",
                 Raiting = ProblemRaiting.Critical,
                 Description = "Обновления нужны не только для повышения стабильности ОС, но и для защиты от угроз и эксплойтов. " +
