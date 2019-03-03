@@ -1,13 +1,8 @@
-﻿using System;
-using SecurityAdvisor.Infrastructure.Generic;
-using static SecurityAdvisor.Infrastructure.Generic.UniversalMethods;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
+﻿using SecurityAdvisor.Infrastructure.Generic;
+using System;
 using System.Net;
-using System.Text;
-using System.Threading.Tasks;
 using System.Text.RegularExpressions;
+using static SecurityAdvisor.Infrastructure.Generic.UniversalMethods;
 
 namespace SecurityAdvisor.Infrastructure.Detection
 {

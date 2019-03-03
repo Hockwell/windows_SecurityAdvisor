@@ -1,13 +1,9 @@
 ﻿using CsQuery;
 using System;
-using System.Collections.Generic;
-using static SecurityAdvisor.Infrastructure.Generic.UniversalMethods;
 using System.IO;
-using System.Linq;
 using System.Net;
-using System.Text;
-using System.Threading.Tasks;
 using System.Text.RegularExpressions;
+using static SecurityAdvisor.Infrastructure.Generic.UniversalMethods;
 
 namespace SecurityAdvisor.Infrastructure.Generic
 {

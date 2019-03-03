@@ -1,12 +1,8 @@
 ﻿using SecurityAdvisor.Infrastructure.Generic;
-using SecurityAdvisor.Model;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace SecurityAdvisor.Infrastructure.Detection
 {
@@ -39,7 +35,7 @@ namespace SecurityAdvisor.Infrastructure.Detection
         private void CheckFileAvailability()
         {
             int loop = 0;
-            int loopMax = 3; //*3=кол-во секунд на ожидание
+            int loopMax = 5; //*3=кол-во секунд на ожидание
 
             do
             {
