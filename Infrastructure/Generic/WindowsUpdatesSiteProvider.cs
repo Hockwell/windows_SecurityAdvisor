@@ -52,13 +52,11 @@ namespace SecurityAdvisor.Infrastructure.Generic
             int halfYear_hours = (365 / 2) * 24;
             string div = DOM["div"].Text();
 
-            Match lastUpdateDateMatch = Regex.Match(div, @"\d{1,2}/\d{2}/\d{4}");
+            Match lastUpdateDateMatch = Regex.Match(div, @"\d{4}-\d{2}-\d{2}"); //2019-04-16 (ISO 8601)
             if (!lastUpdateDateMatch.Success)
                 throw new Exception("Регулярное выражение не обнаружило дату на сайте");
-            string[] MM_dd_yyyy = lastUpdateDateMatch.Value.Split('/'); //Именно так из-за того, что месяц и день могут писаться одной цифрой на сайте, а не двумя через 0: 01, 02...
-            //Если использовать парсинг DateTime строки, то там придётся указывать либо две цифры, либо одну, а может быть и то, и другое:
-            // 2/19/2019, 2/2/2019, 14/3/2019... Инициализация через конструктор поддерживает такие различия
-            DateTime lastUpdateDate = new DateTime(year: int.Parse(MM_dd_yyyy[2]), month: int.Parse(MM_dd_yyyy[0]), day: int.Parse(MM_dd_yyyy[1]));
+            string[] date = lastUpdateDateMatch.Value.Split('-');
+            DateTime lastUpdateDate = new DateTime(year: int.Parse(date[0]), month: int.Parse(date[1]), day: int.Parse(date[2]));
         
             DB db = DB.Load();
             if (db.IsActualTimeNotDetermined())
